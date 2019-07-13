@@ -1,0 +1,120 @@
+server:
+  port: 6789
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+management:
+  security:
+    enabled: false
+security:
+  basic:
+    enabled: false
+logging:
+  level:
+    org.zalando.logbook: TRACE
+  pattern:
+    console: "[%d{dd/MM/yyyy HH:mm:ss,SSS}] %m%n"
+    file: "[%d{dd/MM/yyyy HH:mm:ss,SSS}] %m%n"
+
+zuul:
+#  ignoredPatterns:
+#    - /auth/login/**
+#    - /auth/signup/**
+#    - /auth/verify/**
+#    - /auth/password/**
+#    - /user/me
+  routes:
+    api-category:
+      path: /api/category/**
+      serviceId: category
+    api-sso:
+      path: /api/sso/**
+      serviceId: sso
+    api-core:
+      path: /api/core/**
+      serviceId: core
+    api-schedule:
+      path: /api/schedule/**
+      serviceId: schedule
+    api-notification:
+      path: /api/notification/**
+      serviceId: notification
+    api-auth:
+      path: /api/auth/**
+      serviceId: auth
+  host:
+    connect-timeout-millis: 200000
+    socket-timeout-millis: 200000
+  ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin, Access-Control-Allow-Credentials, Access-Control-Allow-Headers, Access-Control-Allow-Methods
+
+ribbon:
+  eureka:
+    enabled: true
+  ReadTimeout: 30000
+  ConnectTimeout: 30000
+  maxAutoRetries: 1
+  MaxAutoRetriesNextServer: 2
+  OkToRetryOnAllOperations: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+        isolation:
+          strategy: SEMAPHORE
+          thread:
+            timeoutInMilliseconds: 190000
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - OPTIONS
+  session:
+    store-type: none
+  profiles:
+    active: default
+  application:
+    name: gateway
+  datasource:
+    url: "jdbc:mysql://localhost:3306/bookingsport?createDatabaseIfNotExist=true&autoReconnect=true&testOnBorrow=true&useSSL=false&interactiveClient=true&useUnicode=yes&characterEncoding=UTF-8&characterSetResults=UTF-8"
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 1
+      max-lifetime: 1800000
+      maximum-pool-size: 5
+      connection-test-query: SELECT 1 FROM DUAL
+      connection-timeout: 60000
+      pool-name: ${spring.application.name}
+      auto-commit: false
+
+  # ===============================
+  # = Redis configurations
+  # ===============================ß
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password: #X@2019
+    jedis:
+      pool:
+        max-idle: 8
+        max-wait: -1
+        min-idle: 0
+        timeout: 0
+  mvc:
+    dispatch-options-request: true
+demo:
+  bus: "AAAAAAAA"
