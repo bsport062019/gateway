@@ -86,7 +86,7 @@ spring:
   application:
     name: gateway
   datasource:
-    url: "jdbc:mysql://localhost:3306/bookingsport?createDatabaseIfNotExist=true&autoReconnect=true&testOnBorrow=true&useSSL=false&interactiveClient=true&useUnicode=yes&characterEncoding=UTF-8&characterSetResults=UTF-8"
+    url: "jdbc:mysql://localhost:3306/bookingsport?createDatabaseIfNotExist=true&autoReconnect=true&testOnBorrow=true&useSSL=false&interactiveClient=true&useUnicode=yes&characterEncoding=UTF-8&characterSetResults=UTF-8&serverTimezone=UTC"
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -102,7 +102,7 @@ spring:
 
   # ===============================
   # = Redis configurations
-  # ===============================ß
+  # ===============================
   redis:
     database: 0
     host: 127.0.0.1

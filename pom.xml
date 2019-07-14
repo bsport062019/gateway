@@ -5,6 +5,7 @@
     <groupId>com.bsport</groupId>
     <artifactId>gateway</artifactId>
     <version>2019.06.01</version>
+    <packaging>jar</packaging>
     <name>gateway</name>
     <description>Module gateway - dung lam trung gian hung het cac request va dieu huong ve cac micro-service khac
     </description>
