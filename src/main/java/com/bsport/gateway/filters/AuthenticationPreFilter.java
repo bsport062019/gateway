@@ -68,19 +68,17 @@ public class AuthenticationPreFilter extends ZuulFilter {
             if (validateService.ignoredUri(uri))
                 return null;
             Token token = validateService.validateToken(jwtFromRequest);
-            User user = validateService.validateUser(token.getUserId());
-            Role role = new Role(method, uri);
-            Role roleCache = validateService.validateRole(role);
-            if (!validateService.ignoredUri(user.getId(), roleCache.getId())) {
-                return null;
-            }
+//            User user = validateService.validateUser(token.getUserId());
+//            Role role = new Role(method, uri);
+//            Role roleCache = validateService.validateRole(role);
+//            if (!validateService.ignoredUri(user.getId(), roleCache.getId())) {
+//                return null;
+//            }
         } catch (CommonException e) {
             LOGGER.error("[CommonException] when preHandle >>> " + e.toString());
-            /*Commen tam lai de k bi validate - Trien khai hoac muon validate role thi bo ra
             err = e.getMessage();
             status = e.getResponse().getStatus().value();
             setFailedRequest(err, status);
-            */
             return null;
         } catch (Exception e) {
             LOGGER.error("[Exception] when preHandle ", e);
