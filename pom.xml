@@ -352,10 +352,6 @@
         <!-->>>>>>>>>>>>>>>>>>>>>>>>>END POM COMMON<<<<<<<<<<<<<<<<<<<<<<<<<-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-eureka</artifactId>
         </dependency>
         <dependency>
@@ -366,7 +362,7 @@
         <dependency>
             <groupId>com.bsport</groupId>
             <artifactId>common</artifactId>
-            <version>2019.07.26</version>
+            <version>2020.03.31</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
