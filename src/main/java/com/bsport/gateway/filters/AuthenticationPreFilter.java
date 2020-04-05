@@ -5,6 +5,7 @@ import com.bsport.common.exception.CommonException;
 import com.bsport.common.model.auth.Role;
 import com.bsport.common.model.auth.Token;
 import com.bsport.common.model.user.User;
+import com.bsport.common.response.Result;
 import com.bsport.gateway.service.ValidateService;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
@@ -68,23 +69,22 @@ public class AuthenticationPreFilter extends ZuulFilter {
             if (validateService.ignoredUri(uri))
                 return null;
             Token token = validateService.validateToken(jwtFromRequest);
-//            User user = validateService.validateUser(token.getUserId());
-//            Role role = new Role(method, uri);
-//            Role roleCache = validateService.validateRole(role);
-//            if (!validateService.ignoredUri(user.getId(), roleCache.getId())) {
-//                return null;
-//            }
+            User user = validateService.validateUser(token.getUserId());
+            Role role = new Role(method, uri);
+            Role roleCache = validateService.validateRole(role);
+            if (!validateService.ignoredUri(user.getId(), roleCache.getId())) {
+                return null;
+            }
         } catch (CommonException e) {
             LOGGER.error("[CommonException] when preHandle >>> " + e.toString());
             err = e.getMessage();
-            status = e.getResponse().getStatus().value();
-            setFailedRequest(err, status);
+            setFailedRequest(new Result(e.getResponse().getResponseCode(), e.getMessage()));
             return null;
         } catch (Exception e) {
             LOGGER.error("[Exception] when preHandle ", e);
             err = ("Exception when preHandle " + e.getMessage());
             status = HttpStatus.INTERNAL_SERVER_ERROR.value();
-            setFailedRequest(err, status);
+            setFailedRequest(new Result(HttpStatus.INTERNAL_SERVER_ERROR.value() + "", e.getMessage()));
             return null;
         } finally {
             LOGGER.info("[E][" + id + "][Duration = " + (System.currentTimeMillis() - id) + "] preHandle " + status + " > " + err);
@@ -96,15 +96,14 @@ public class AuthenticationPreFilter extends ZuulFilter {
      * Reports an error message given a response body and code.
      *
      * @param body
-     * @param code
      */
-    private void setFailedRequest(String body, int code) {
+    private void setFailedRequest(Result body) {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletResponse response = ctx.getResponse();
-        ctx.setResponseStatusCode(code);
+        ctx.setResponseStatusCode(HttpStatus.OK.value());
         if (ctx.getResponseBody() == null) {
             response.setContentType("text/plain; charset=UTF-8");
-            ctx.setResponseBody(body);
+            ctx.setResponseBody(body.toString());
             ctx.setSendZuulResponse(false);
         }
     }
