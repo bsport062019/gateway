@@ -362,7 +362,7 @@
         <dependency>
             <groupId>com.bsport</groupId>
             <artifactId>common</artifactId>
-            <version>2020.03.31</version>
+            <version>2020.04.05</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>

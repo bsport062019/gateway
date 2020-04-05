@@ -6,6 +6,7 @@ import com.bsport.common.model.auth.Role;
 import com.bsport.common.model.auth.Token;
 import com.bsport.common.model.user.User;
 import com.bsport.common.response.Result;
+import com.bsport.common.util.JsonCommon;
 import com.bsport.gateway.service.ValidateService;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
@@ -69,12 +70,12 @@ public class AuthenticationPreFilter extends ZuulFilter {
             if (validateService.ignoredUri(uri))
                 return null;
             Token token = validateService.validateToken(jwtFromRequest);
-            User user = validateService.validateUser(token.getUserId());
-            Role role = new Role(method, uri);
-            Role roleCache = validateService.validateRole(role);
-            if (!validateService.ignoredUri(user.getId(), roleCache.getId())) {
-                return null;
-            }
+//            User user = validateService.validateUser(token.getUserId());
+//            Role role = new Role(method, uri);
+//            Role roleCache = validateService.validateRole(role);
+//            if (!validateService.ignoredUri(user.getId(), roleCache.getId())) {
+//                return null;
+//            }
         } catch (CommonException e) {
             LOGGER.error("[CommonException] when preHandle >>> " + e.toString());
             err = e.getMessage();
@@ -103,7 +104,7 @@ public class AuthenticationPreFilter extends ZuulFilter {
         ctx.setResponseStatusCode(HttpStatus.OK.value());
         if (ctx.getResponseBody() == null) {
             response.setContentType("text/plain; charset=UTF-8");
-            ctx.setResponseBody(body.toString());
+            ctx.setResponseBody(JsonCommon.objectToJsonFull(body));
             ctx.setSendZuulResponse(false);
         }
     }
